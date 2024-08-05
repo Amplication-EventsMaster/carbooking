@@ -28,6 +28,8 @@ public class CustomerDbModel
     [StringLength(1000)]
     public string? Phone_2 { get; set; }
 
+    public List<ReviewDbModel>? Reviews { get; set; } = new List<ReviewDbModel>();
+
     [Required()]
     public DateTime UpdatedAt { get; set; }
 }

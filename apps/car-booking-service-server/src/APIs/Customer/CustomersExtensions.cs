@@ -17,6 +17,7 @@ public static class CustomersExtensions
             Name = model.Name,
             Phone = model.Phone,
             Phone_2 = model.Phone_2,
+            Reviews = model.Reviews?.Select(x => x.Id).ToList(),
             UpdatedAt = model.UpdatedAt,
         };
     }

@@ -91,8 +91,8 @@ public abstract class BookingsServiceBase : IBookingsService
     public async Task<List<Booking>> Bookings(BookingFindManyArgs findManyArgs)
     {
         var bookings = await _context
-            .Bookings.Include(x => x.Customer)
-            .Include(x => x.Car)
+            .Bookings.Include(x => x.Car)
+            .Include(x => x.Customer)
             .Include(x => x.Payments)
             .ApplyWhere(findManyArgs.Where)
             .ApplySkip(findManyArgs.Skip)

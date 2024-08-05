@@ -98,4 +98,36 @@ public interface ICustomersService
         CustomerWhereUniqueInput uniqueId,
         FeedbackWhereUniqueInput[] feedbacksId
     );
+
+    /// <summary>
+    /// Connect multiple Reviews records to Customer
+    /// </summary>
+    public Task ConnectReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewWhereUniqueInput[] reviewsId
+    );
+
+    /// <summary>
+    /// Disconnect multiple Reviews records from Customer
+    /// </summary>
+    public Task DisconnectReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewWhereUniqueInput[] reviewsId
+    );
+
+    /// <summary>
+    /// Find multiple Reviews records for Customer
+    /// </summary>
+    public Task<List<Review>> FindReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewFindManyArgs ReviewFindManyArgs
+    );
+
+    /// <summary>
+    /// Update multiple Reviews records for Customer
+    /// </summary>
+    public Task UpdateReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewWhereUniqueInput[] reviewsId
+    );
 }

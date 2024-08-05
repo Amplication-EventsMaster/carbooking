@@ -18,5 +18,7 @@ public class CustomerCreateInput
 
     public string? Phone_2 { get; set; }
 
+    public List<Review>? Reviews { get; set; }
+
     public DateTime UpdatedAt { get; set; }
 }

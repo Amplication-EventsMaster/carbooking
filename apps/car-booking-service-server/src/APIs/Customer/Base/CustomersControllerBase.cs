@@ -270,4 +270,86 @@ public abstract class CustomersControllerBase : ControllerBase
 
         return NoContent();
     }
+
+    /// <summary>
+    /// Connect multiple Reviews records to Customer
+    /// </summary>
+    [HttpPost("{Id}/reviews")]
+    public async Task<ActionResult> ConnectReviews(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromQuery()] ReviewWhereUniqueInput[] reviewsId
+    )
+    {
+        try
+        {
+            await _service.ConnectReviews(uniqueId, reviewsId);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Disconnect multiple Reviews records from Customer
+    /// </summary>
+    [HttpDelete("{Id}/reviews")]
+    public async Task<ActionResult> DisconnectReviews(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromBody()] ReviewWhereUniqueInput[] reviewsId
+    )
+    {
+        try
+        {
+            await _service.DisconnectReviews(uniqueId, reviewsId);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Find multiple Reviews records for Customer
+    /// </summary>
+    [HttpGet("{Id}/reviews")]
+    public async Task<ActionResult<List<Review>>> FindReviews(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromQuery()] ReviewFindManyArgs filter
+    )
+    {
+        try
+        {
+            return Ok(await _service.FindReviews(uniqueId, filter));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    /// <summary>
+    /// Update multiple Reviews records for Customer
+    /// </summary>
+    [HttpPatch("{Id}/reviews")]
+    public async Task<ActionResult> UpdateReviews(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromBody()] ReviewWhereUniqueInput[] reviewsId
+    )
+    {
+        try
+        {
+            await _service.UpdateReviews(uniqueId, reviewsId);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

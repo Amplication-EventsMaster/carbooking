@@ -18,5 +18,7 @@ public class Customer
 
     public string? Phone_2 { get; set; }
 
+    public List<string>? Reviews { get; set; }
+
     public DateTime UpdatedAt { get; set; }
 }

@@ -55,6 +55,13 @@ public abstract class CustomersServiceBase : ICustomersService
                 .ToListAsync();
         }
 
+        if (createDto.Reviews != null)
+        {
+            customer.Reviews = await _context
+                .Reviews.Where(review => createDto.Reviews.Select(t => t.Id).Contains(review.Id))
+                .ToListAsync();
+        }
+
         _context.Customers.Add(customer);
         await _context.SaveChangesAsync();
 
@@ -91,6 +98,7 @@ public abstract class CustomersServiceBase : ICustomersService
         var customers = await _context
             .Customers.Include(x => x.Bookings)
             .Include(x => x.Feedbacks)
+            .Include(x => x.Reviews)
             .ApplyWhere(findManyArgs.Where)
             .ApplySkip(findManyArgs.Skip)
             .ApplyTake(findManyArgs.Take)
@@ -149,6 +157,13 @@ public abstract class CustomersServiceBase : ICustomersService
                 .Feedbacks.Where(feedback =>
                     updateDto.Feedbacks.Select(t => t).Contains(feedback.Id)
                 )
+                .ToListAsync();
+        }
+
+        if (updateDto.Reviews != null)
+        {
+            customer.Reviews = await _context
+                .Reviews.Where(review => updateDto.Reviews.Select(t => t).Contains(review.Id))
                 .ToListAsync();
         }
 
@@ -386,6 +401,115 @@ public abstract class CustomersServiceBase : ICustomersService
         }
 
         customer.Feedbacks = feedbacks;
+        await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Connect multiple Reviews records to Customer
+    /// </summary>
+    public async Task ConnectReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewWhereUniqueInput[] reviewsId
+    )
+    {
+        var parent = await _context
+            .Customers.Include(x => x.Reviews)
+            .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
+        if (parent == null)
+        {
+            throw new NotFoundException();
+        }
+
+        var reviews = await _context
+            .Reviews.Where(t => reviewsId.Select(x => x.Id).Contains(t.Id))
+            .ToListAsync();
+        if (reviews.Count == 0)
+        {
+            throw new NotFoundException();
+        }
+
+        var reviewsToConnect = reviews.Except(parent.Reviews);
+
+        foreach (var review in reviewsToConnect)
+        {
+            parent.Reviews.Add(review);
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Disconnect multiple Reviews records from Customer
+    /// </summary>
+    public async Task DisconnectReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewWhereUniqueInput[] reviewsId
+    )
+    {
+        var parent = await _context
+            .Customers.Include(x => x.Reviews)
+            .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
+        if (parent == null)
+        {
+            throw new NotFoundException();
+        }
+
+        var reviews = await _context
+            .Reviews.Where(t => reviewsId.Select(x => x.Id).Contains(t.Id))
+            .ToListAsync();
+
+        foreach (var review in reviews)
+        {
+            parent.Reviews?.Remove(review);
+        }
+        await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Find multiple Reviews records for Customer
+    /// </summary>
+    public async Task<List<Review>> FindReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewFindManyArgs customerFindManyArgs
+    )
+    {
+        var reviews = await _context
+            .Reviews.Where(m => m.CustomerId == uniqueId.Id)
+            .ApplyWhere(customerFindManyArgs.Where)
+            .ApplySkip(customerFindManyArgs.Skip)
+            .ApplyTake(customerFindManyArgs.Take)
+            .ApplyOrderBy(customerFindManyArgs.SortBy)
+            .ToListAsync();
+
+        return reviews.Select(x => x.ToDto()).ToList();
+    }
+
+    /// <summary>
+    /// Update multiple Reviews records for Customer
+    /// </summary>
+    public async Task UpdateReviews(
+        CustomerWhereUniqueInput uniqueId,
+        ReviewWhereUniqueInput[] reviewsId
+    )
+    {
+        var customer = await _context
+            .Customers.Include(t => t.Reviews)
+            .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
+        if (customer == null)
+        {
+            throw new NotFoundException();
+        }
+
+        var reviews = await _context
+            .Reviews.Where(a => reviewsId.Select(x => x.Id).Contains(a.Id))
+            .ToListAsync();
+
+        if (reviews.Count == 0)
+        {
+            throw new NotFoundException();
+        }
+
+        customer.Reviews = reviews;
         await _context.SaveChangesAsync();
     }
 }

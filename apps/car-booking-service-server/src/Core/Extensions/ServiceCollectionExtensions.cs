@@ -14,5 +14,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICustomersService, CustomersService>();
         services.AddScoped<IFeedbacksService, FeedbacksService>();
         services.AddScoped<IPaymentsService, PaymentsService>();
+        services.AddScoped<IReviewsService, ReviewsService>();
     }
 }
