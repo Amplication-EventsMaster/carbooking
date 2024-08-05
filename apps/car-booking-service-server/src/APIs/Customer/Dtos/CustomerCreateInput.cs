@@ -8,6 +8,8 @@ public class CustomerCreateInput
 
     public string? Email { get; set; }
 
+    public List<Feedback>? Feedbacks { get; set; }
+
     public string? Id { get; set; }
 
     public string? Name { get; set; }

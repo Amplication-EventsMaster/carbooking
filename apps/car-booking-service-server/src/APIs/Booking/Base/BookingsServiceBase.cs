@@ -91,8 +91,8 @@ public abstract class BookingsServiceBase : IBookingsService
     public async Task<List<Booking>> Bookings(BookingFindManyArgs findManyArgs)
     {
         var bookings = await _context
-            .Bookings.Include(x => x.Car)
-            .Include(x => x.Customer)
+            .Bookings.Include(x => x.Customer)
+            .Include(x => x.Car)
             .Include(x => x.Payments)
             .ApplyWhere(findManyArgs.Where)
             .ApplySkip(findManyArgs.Skip)
@@ -202,10 +202,10 @@ public abstract class BookingsServiceBase : IBookingsService
         PaymentWhereUniqueInput[] paymentsId
     )
     {
-        var booking = await _context
+        var parent = await _context
             .Bookings.Include(x => x.Payments)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
-        if (booking == null)
+        if (parent == null)
         {
             throw new NotFoundException();
         }
@@ -218,11 +218,11 @@ public abstract class BookingsServiceBase : IBookingsService
             throw new NotFoundException();
         }
 
-        var paymentsToConnect = payments.Except(booking.Payments);
+        var paymentsToConnect = payments.Except(parent.Payments);
 
         foreach (var payment in paymentsToConnect)
         {
-            booking.Payments.Add(payment);
+            parent.Payments.Add(payment);
         }
 
         await _context.SaveChangesAsync();
@@ -236,10 +236,10 @@ public abstract class BookingsServiceBase : IBookingsService
         PaymentWhereUniqueInput[] paymentsId
     )
     {
-        var booking = await _context
+        var parent = await _context
             .Bookings.Include(x => x.Payments)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
-        if (booking == null)
+        if (parent == null)
         {
             throw new NotFoundException();
         }
@@ -250,7 +250,7 @@ public abstract class BookingsServiceBase : IBookingsService
 
         foreach (var payment in payments)
         {
-            booking.Payments?.Remove(payment);
+            parent.Payments?.Remove(payment);
         }
         await _context.SaveChangesAsync();
     }

@@ -66,4 +66,36 @@ public interface ICustomersService
         CustomerWhereUniqueInput uniqueId,
         BookingWhereUniqueInput[] bookingsId
     );
+
+    /// <summary>
+    /// Connect multiple feedbacks records to Customer
+    /// </summary>
+    public Task ConnectFeedbacks(
+        CustomerWhereUniqueInput uniqueId,
+        FeedbackWhereUniqueInput[] feedbacksId
+    );
+
+    /// <summary>
+    /// Disconnect multiple feedbacks records from Customer
+    /// </summary>
+    public Task DisconnectFeedbacks(
+        CustomerWhereUniqueInput uniqueId,
+        FeedbackWhereUniqueInput[] feedbacksId
+    );
+
+    /// <summary>
+    /// Find multiple feedbacks records for Customer
+    /// </summary>
+    public Task<List<Feedback>> FindFeedbacks(
+        CustomerWhereUniqueInput uniqueId,
+        FeedbackFindManyArgs FeedbackFindManyArgs
+    );
+
+    /// <summary>
+    /// Update multiple feedbacks records for Customer
+    /// </summary>
+    public Task UpdateFeedbacks(
+        CustomerWhereUniqueInput uniqueId,
+        FeedbackWhereUniqueInput[] feedbacksId
+    );
 }

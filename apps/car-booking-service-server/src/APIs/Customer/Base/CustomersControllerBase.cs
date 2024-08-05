@@ -188,4 +188,86 @@ public abstract class CustomersControllerBase : ControllerBase
 
         return NoContent();
     }
+
+    /// <summary>
+    /// Connect multiple feedbacks records to Customer
+    /// </summary>
+    [HttpPost("{Id}/feedbacks")]
+    public async Task<ActionResult> ConnectFeedbacks(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromQuery()] FeedbackWhereUniqueInput[] feedbacksId
+    )
+    {
+        try
+        {
+            await _service.ConnectFeedbacks(uniqueId, feedbacksId);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Disconnect multiple feedbacks records from Customer
+    /// </summary>
+    [HttpDelete("{Id}/feedbacks")]
+    public async Task<ActionResult> DisconnectFeedbacks(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromBody()] FeedbackWhereUniqueInput[] feedbacksId
+    )
+    {
+        try
+        {
+            await _service.DisconnectFeedbacks(uniqueId, feedbacksId);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Find multiple feedbacks records for Customer
+    /// </summary>
+    [HttpGet("{Id}/feedbacks")]
+    public async Task<ActionResult<List<Feedback>>> FindFeedbacks(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromQuery()] FeedbackFindManyArgs filter
+    )
+    {
+        try
+        {
+            return Ok(await _service.FindFeedbacks(uniqueId, filter));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    /// <summary>
+    /// Update multiple feedbacks records for Customer
+    /// </summary>
+    [HttpPatch("{Id}/feedbacks")]
+    public async Task<ActionResult> UpdateFeedbacks(
+        [FromRoute()] CustomerWhereUniqueInput uniqueId,
+        [FromBody()] FeedbackWhereUniqueInput[] feedbacksId
+    )
+    {
+        try
+        {
+            await _service.UpdateFeedbacks(uniqueId, feedbacksId);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

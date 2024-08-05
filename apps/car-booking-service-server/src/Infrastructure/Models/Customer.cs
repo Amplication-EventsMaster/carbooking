@@ -13,6 +13,8 @@ public class CustomerDbModel
 
     public string? Email { get; set; }
 
+    public List<FeedbackDbModel>? Feedbacks { get; set; } = new List<FeedbackDbModel>();
+
     [Key()]
     [Required()]
     public string Id { get; set; }
