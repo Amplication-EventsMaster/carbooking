@@ -12,10 +12,12 @@ public static class CustomersExtensions
             Bookings = model.Bookings?.Select(x => x.Id).ToList(),
             CreatedAt = model.CreatedAt,
             Email = model.Email,
+            Feedbacks = model.Feedbacks?.Select(x => x.Id).ToList(),
             Id = model.Id,
             Name = model.Name,
             Phone = model.Phone,
             Phone_2 = model.Phone_2,
+            Reviews = model.Reviews?.Select(x => x.Id).ToList(),
             UpdatedAt = model.UpdatedAt,
         };
     }

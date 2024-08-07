@@ -156,10 +156,10 @@ public abstract class CarsServiceBase : ICarsService
         BookingWhereUniqueInput[] bookingsId
     )
     {
-        var car = await _context
+        var parent = await _context
             .Cars.Include(x => x.Bookings)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
-        if (car == null)
+        if (parent == null)
         {
             throw new NotFoundException();
         }
@@ -172,11 +172,11 @@ public abstract class CarsServiceBase : ICarsService
             throw new NotFoundException();
         }
 
-        var bookingsToConnect = bookings.Except(car.Bookings);
+        var bookingsToConnect = bookings.Except(parent.Bookings);
 
         foreach (var booking in bookingsToConnect)
         {
-            car.Bookings.Add(booking);
+            parent.Bookings.Add(booking);
         }
 
         await _context.SaveChangesAsync();
@@ -190,10 +190,10 @@ public abstract class CarsServiceBase : ICarsService
         BookingWhereUniqueInput[] bookingsId
     )
     {
-        var car = await _context
+        var parent = await _context
             .Cars.Include(x => x.Bookings)
             .FirstOrDefaultAsync(x => x.Id == uniqueId.Id);
-        if (car == null)
+        if (parent == null)
         {
             throw new NotFoundException();
         }
@@ -204,7 +204,7 @@ public abstract class CarsServiceBase : ICarsService
 
         foreach (var booking in bookings)
         {
-            car.Bookings?.Remove(booking);
+            parent.Bookings?.Remove(booking);
         }
         await _context.SaveChangesAsync();
     }

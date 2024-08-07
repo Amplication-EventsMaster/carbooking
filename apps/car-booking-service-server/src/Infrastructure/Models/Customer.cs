@@ -13,6 +13,8 @@ public class CustomerDbModel
 
     public string? Email { get; set; }
 
+    public List<FeedbackDbModel>? Feedbacks { get; set; } = new List<FeedbackDbModel>();
+
     [Key()]
     [Required()]
     public string Id { get; set; }
@@ -25,6 +27,8 @@ public class CustomerDbModel
 
     [StringLength(1000)]
     public string? Phone_2 { get; set; }
+
+    public List<ReviewDbModel>? Reviews { get; set; } = new List<ReviewDbModel>();
 
     [Required()]
     public DateTime UpdatedAt { get; set; }

@@ -15,4 +15,8 @@ public class CarBookingServiceDbContext : DbContext
     public DbSet<PaymentDbModel> Payments { get; set; }
 
     public DbSet<BookingDbModel> Bookings { get; set; }
+
+    public DbSet<FeedbackDbModel> Feedbacks { get; set; }
+
+    public DbSet<ReviewDbModel> Reviews { get; set; }
 }
